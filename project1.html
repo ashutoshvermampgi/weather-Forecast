@@ -1,0 +1,158 @@
+#weather forecast project
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Forecast</title>
+    <link rel="stylesheet" href="log.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Weather Forecast</h1>
+        <div class="input-container">
+            <input type="text" id="city" placeholder="Enter City Name" />
+            <button id="get-weather-btn">Get Weather</button>
+        </div>
+        <div id="weather-info" class="weather-info">
+            <!-- Weather details will be displayed here -->
+        </div>
+    </div>
+    <script src="log.js"></script>
+</body>
+</html>
+
+
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600&display=swap");
+
+body {
+  background-image: url("https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2076&q=80");
+  background-size: cover;
+
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  height: 100vh;
+}
+
+::placeholder {
+  color: #fff;
+}
+
+input {
+  background-color: #575757;
+  border: none;
+  border-radius: 25px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 1rem;
+  min-width: 300px;
+  color: #fff;
+  transition: 0.2s;
+}
+
+input#search:hover {
+  background: #65747b;
+}
+
+input:focus {
+  outline: none;
+  align-items: center;
+  margin-bottom: 0;
+  padding-left: 85px;
+}
+
+.weather {
+  font-size: 2rem;
+  text-align: center;
+}
+
+.weather h2 {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0;
+  padding-left: 90px;
+}
+
+.card {
+  background: #000000b2;
+  width: 100%;
+  max-width: 470px;
+  height: 70%;
+  padding: 2.5em;
+  text-align: center;
+  border-radius: 30px;
+  color: white;
+}
+
+.more-info p {
+  font-size: 20px;
+}
+.more-info span {
+  font-weight: 600;
+}
+
+
+
+// Event listener for the button to get the weather
+document.getElementById("get-weather-btn").addEventListener("click", function() {
+  const city = document.getElementById("city").value;
+  if (city) {
+      getWeather(city);
+  } else {
+      alert("Please enter a city name");
+  }
+});
+
+// Function to fetch weather data from the OpenWeather API
+function getWeather(city) {
+  const apiKey = "fcc8de7015bbb202209bbf0261babf4c"; // Replace with your OpenWeather API key
+  const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+  fetch(apiUrl)
+      .then(response => {
+          if (!response.ok) {
+              throw new Error("City not found");
+          }
+          return response.json();
+      })
+      .then(data => {
+          displayWeather(data);
+      })
+      .catch(error => {
+          alert(error.message);
+      });
+}
+
+// Function to display the weather data
+function displayWeather(data) {
+  const weatherInfoDiv = document.getElementById("weather-info");
+
+  // Extracting necessary data
+  const cityName = data.name;
+  const temperature = data.main.temp;
+  const weatherCondition = data.weather[0].description;
+  const humidity = data.main.humidity;
+  const windSpeed = data.wind.speed;
+
+  // Displaying the data dynamically
+  weatherInfoDiv.innerHTML = `
+      <p><strong>City:</strong> ${cityName}</p>
+      <p><strong>Temperature:</strong> ${temperature}°C</p>
+      <p><strong>Condition:</strong> ${weatherCondition}</p>
+      <p><strong>Humidity:</strong> ${humidity}%</p>
+      <p><strong>Wind Speed:</strong> ${windSpeed} m/s</p>
+  `;
+}
+
+
+ 
+  
+  
+  
